@@ -2,6 +2,7 @@ CleverData
 ==========
 
 Basic class analysis of Clever Demo API data using Underscore.js
+Demo site: http://joevasquez.com/Clever/
 
 <h2>Step 1: Install Node.js and Underscore CLI</h2>
 ```
