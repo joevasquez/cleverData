@@ -3,11 +3,27 @@
 <html>
 <head>
     <title>Clever Data Analysis</title>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>    
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js"></script>
     <script type="text/javascript" src="https://raw.github.com/douglascrockford/JSON-js/master/json2.js"></script>
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">    
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>	
 	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script>
+function(){
+  $('#myTab a').click(function(e) {
+    e.preventDefault();
+    $(this).tab('show');
+  });
+};
+
+function(){
+  $('#myTab2 a').click(function(e) {
+    e.preventDefault();
+    $(this).tab('show');
+  });
+};
+</script>
 
     <script type="text/template" id="tpl-html">
 	
@@ -47,6 +63,7 @@
 	
 	/* Style northward tooltips differently */
 	.d3-tip.n:after { margin: -1px 0 0 0; top: 100%; left: 0; }
+	
 	</style>
 
         <div class="well">
@@ -101,33 +118,47 @@
 </head>
 <body style="padding:50px 10px ">
     <div class="container">
-      <h1>Subject Data</h1>
-      <h3>The below chart was built with the d3.js library</h3><br/><br/>
-      <div class="chart"></div>
-      <table id="tb" class="table">
-      <thead>
-        <tr>
-            <th>Subject</th>
-            <th>Students/Course</th>
-            <th>Total Students</th>
-            <th>Total Courses</th>
-        </tr>      
-      </thead>
-      </table>
-      
-      <h1>Class Data</h1>
-      <table id="tb-2" class="table">
-      <thead>
-        <tr>
-            <th>Class</th>
-            <th>Students/Course</th>
-            <th>Total Students</th>
-            <th>Total Courses</th>
-        </tr>      
-      </thead>
-      </table>
-      <div id="output"></div>
-    </div>
+    
+      <ul class="nav nav-tabs nav-justified">
+        <li class="active"><a href="#subject" data-toggle="tab"><h3>Subject Data</h3></a></li>
+        <li><a href="#class" data-toggle="tab"><h3>Class Data</h3></a></li>
+        <li><a href="#students" data-toggle="tab"><h3>Student Data</h3></a></li>
+      </ul>
+          
+      <div class="tab-content">
+        <div class="tab-pane active" id="subject">
+        	<h1>Subject Data</h1>
+      		<h3>The below chart was built with the d3.js library</h3><br/><br/>
+      		<div class="chart"></div><br/>    
+            <table id="tb" class="table">
+            <thead>
+              <tr>
+                  <th>Subject</th>
+                  <th>Students/Course</th>
+                  <th>Total Students</th>
+                  <th>Total Courses</th>
+              </tr>      
+            </thead>
+            </table>                
+        </div>
+        <div class="tab-pane " id="class">
+          <h1>Class Data</h1>
+          <table id="tb-2" class="table">
+          <thead>
+            <tr>
+                <th>Class</th>
+                <th>Students/Course</th>
+                <th>Total Students</th>
+                <th>Total Courses</th>
+            </tr>      
+          </thead>
+          </table>     
+        </div>
+        <div class="tab-pane " id="students">
+      		<div id="output"></div>
+        </div>
+      </div>    
+     </div>
  
 </body>
 
@@ -279,6 +310,15 @@ svg.call(tip);
 	// The new data variable.
 	var data = [];
 	for(var j=0;j<subjectData.length-1;j++){
+        val = subjectData[j].name;
+        newVal = '';
+        val = val.split(' ');
+        for(var c=0; c < val.length; c++) {
+                newVal += val[c].substring(0,1).toUpperCase() +
+val[c].substring(1,val[c].length) + ' ';
+        }
+        subjectData[j].name = newVal;		
+		
 		data[j] = {
 			name: subjectData[j].name.substring(0, 45),
 			average: subjectData[j].average
@@ -330,5 +370,6 @@ attr("transform", function(d) {
 });
 
 </script>
+
 
 </html>
