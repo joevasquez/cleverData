@@ -21,6 +21,7 @@
 	.bar { fill: orange; }
 	.bar:hover { fill: orangered ;}
 	.x.axis path { display: none; }
+	.tick {text-align:right; padding-right:20px}
 	
 	.d3-tip {
 	  line-height: 1;
@@ -45,11 +46,7 @@
 	}
 	
 	/* Style northward tooltips differently */
-	.d3-tip.n:after {
-	  margin: -1px 0 0 0;
-	  top: 100%;
-	  left: 0;
-	}
+	.d3-tip.n:after { margin: -1px 0 0 0; top: 100%; left: 0; }
 	</style>
 
         <div class="well">
@@ -104,9 +101,9 @@
 </head>
 <body style="padding:50px 10px ">
     <div class="container">
-      <div class="chart"></div>
-    
       <h1>Subject Data</h1>
+      <h3>The below chart was built with the d3.js library</h3><br/><br/>
+      <div class="chart"></div>
       <table id="tb" class="table">
       <thead>
         <tr>
@@ -263,28 +260,27 @@ var xAxis = d3.svg.axis()
 var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left")
-    .tickFormat(formatPercent);
 
 var tip = d3.tip()
   .attr('class', 'd3-tip')
   .offset([-10, 0])
   .html(function(d) {
-    return "<strong>average:</strong> <span style='color:red'>" + d.average + "</span>";
+    return "<strong>" + d.name + " Average:</strong> <span style='color:red'>" + d.average + "</span>";
   })
 
 var svg = d3.select(".chart").append("svg")
     .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("height", height + margin.top + margin.bottom + 30)
   .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    .attr("transform", "translate(60,10)");
 
 svg.call(tip);
 
 	// The new data variable.
 	var data = [];
-	for(var j=0;j<subjectData.length;j++){
+	for(var j=0;j<subjectData.length-1;j++){
 		data[j] = {
-			name: subjectData[j].name,
+			name: subjectData[j].name.substring(0, 45),
 			average: subjectData[j].average
 		};
 	};
@@ -298,8 +294,8 @@ x.domain(data.map(function(d) { return d.name; }));
 y.domain([0, d3.max(data, function(d) { return d.average; })]);
 
 svg.append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0," + height + ")")
+    .attr("class", "x-axis")
+    .attr("transform", "translate(10," + height + ")")
     .call(xAxis);
 
 svg.append("g")
@@ -327,6 +323,11 @@ function type(d) {
   d.average = +d.average;
   return d;
 }
+
+svg.selectAll(".x-axis text"). // select all the text elements for the xaxis
+attr("transform", function(d) {
+    return "translate(" + this.getBBox().height * -2 + "," + this.getBBox().height + ")rotate(-45)";
+});
 
 </script>
 
